@@ -2,12 +2,10 @@ package com.jjq.wanandroid_compose
 
 import android.content.res.Resources.Theme
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
@@ -19,26 +17,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import com.jjq.wanandroid_compose.ui.theme.BottomType
+import com.jjq.wanandroid_compose.ui.home.HomeScreenContent
 import com.jjq.wanandroid_compose.ui.theme.WanAndroid_composeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WanAndroid_composeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+            BaseView(
+                content = { MainAppContent() }
+            )
         }
+    }
+}
+
+@Composable
+fun BaseView(
+    content: @Composable () -> Unit
+) {
+    WanAndroid_composeTheme {
+        content()
+    }
+
+}
+
+@Composable
+fun MainAppContent() {
+
+    val homeScreenState = rememberSaveable() {
+        mutableStateOf((BottomType.HOME))
+    }
+
+    Column {
+        HomeScreenContent(
+            modifier = Modifier.height(100.dp).width(100.dp)
+        )
+        BottomNavigationContent(
+            modifier = Modifier.semantics { contentDescription = "bottom" },
+            homeState = homeScreenState
+        )
     }
 }
 
@@ -126,22 +147,6 @@ fun BottomItem(name: String, modifier: Modifier = Modifier) {
         
     }
 
-}
-
-@Composable
-fun BaseView(
-    appTheme: Theme
-) {
-
-
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)

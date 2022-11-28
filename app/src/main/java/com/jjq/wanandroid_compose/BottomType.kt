@@ -1,4 +1,4 @@
-package com.jjq.wanandroid_compose.ui.theme
+package com.jjq.wanandroid_compose
 
 enum class BottomType {
     //首页，体系，公众号，项目，我的
